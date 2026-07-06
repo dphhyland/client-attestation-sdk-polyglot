@@ -1,0 +1,65 @@
+package clientattestation
+
+// HTTP header names carried at the token endpoint.
+const (
+	AttestationHeader = "OAuth-Client-Attestation"
+	PopHeader         = "OAuth-Client-Attestation-PoP"
+	DpopHeader        = "DPoP"
+)
+
+// ClientAttestationCredential is the Attester-issued attestation JWT plus the
+// instance key it is bound to. It produces the token-request headers — dedicated
+// PoP-JWT mode or DPoP combined mode — minting a fresh proof of possession each
+// call.
+type ClientAttestationCredential struct {
+	attestationJWT string
+	instanceKey    *SigningKeyPair
+}
+
+// NewClientAttestationCredential wraps an attestation JWT and its instance key.
+func NewClientAttestationCredential(attestationJWT string, instanceKey *SigningKeyPair) (*ClientAttestationCredential, error) {
+	jwt, err := requireText(attestationJWT, "attestation_jwt")
+	if err != nil {
+		return nil, err
+	}
+	return &ClientAttestationCredential{attestationJWT: jwt, instanceKey: instanceKey}, nil
+}
+
+// PopHeaders returns the headers for dedicated PoP-JWT mode
+// (attest_jwt_client_auth): OAuth-Client-Attestation + OAuth-Client-Attestation-PoP.
+// clientID becomes the PoP "iss" (pass "" to omit); audience is required;
+// challenge is optional (pass "" to omit).
+func (c *ClientAttestationCredential) PopHeaders(clientID, audience, challenge string) (map[string]string, error) {
+	pop, err := NewPopBuilder(c.instanceKey).
+		ClientID(clientID).
+		Audience(audience).
+		Challenge(challenge).
+		Build()
+	if err != nil {
+		return nil, err
+	}
+	return map[string]string{
+		AttestationHeader: c.attestationJWT,
+		PopHeader:         pop,
+	}, nil
+}
+
+// DpopHeaders returns the headers for DPoP combined mode
+// (attest_jwt_client_auth_dpop): OAuth-Client-Attestation + DPoP (no PoP header).
+// method is the token request HTTP method (DPoP "htm"); uri is the token endpoint
+// (DPoP "htu"), required; challenge is the optional server challenge (DPoP
+// "nonce", pass "" to omit).
+func (c *ClientAttestationCredential) DpopHeaders(method, uri, challenge string) (map[string]string, error) {
+	dpop, err := NewDpopProofBuilder(c.instanceKey).
+		Method(method).
+		URI(uri).
+		Nonce(challenge).
+		Build()
+	if err != nil {
+		return nil, err
+	}
+	return map[string]string{
+		AttestationHeader: c.attestationJWT,
+		DpopHeader:        dpop,
+	}, nil
+}

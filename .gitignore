@@ -1,0 +1,21 @@
+# Build outputs / dependencies
+**/target/
+**/dist/
+**/build/
+**/__pycache__/
+**/*.class
+**/*.egg-info/
+python/.venv/
+typescript/node_modules/
+go/bin/
+interop/out/
+
+# Generated interop artifacts (time-varying — inputs.json IS committed)
+vectors/out/
+
+# Secrets / keys (real ones — the fixed test vectors in vectors/inputs.json are intentional)
+*.pem
+*.p12
+*.jks
+id_*
+.DS_Store
