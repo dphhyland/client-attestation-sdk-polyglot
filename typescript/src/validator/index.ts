@@ -17,5 +17,7 @@ export type {
 export type { ValidationResult } from "./result.js";
 export type { ValidationError } from "./errors.js";
 export * as errors from "./errors.js";
+export { ProtectedResource, bearerToken } from "./resource.js";
+export type { ProtectedResourceMetadata, AuthDecision } from "./resource.js";
 
 export const VALIDATOR_VERSION = "0.1.0";

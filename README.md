@@ -83,6 +83,35 @@ algorithm → key → signature → `iss` → `exp` → `nbf` → audience → s
 code (`invalid_signature`, `invalid_issuer`, `expired`, `not_yet_valid`, `invalid_audience`,
 `insufficient_scope`, …).
 
+## Resource server for MCP / A2A
+
+The validator is protocol-neutral OAuth resource-server validation, so it already does what an **MCP server**
+or **A2A agent** must — verify the token and enforce audience + scope. `ProtectedResource` adds the HTTP
+conventions on top: RFC 9728 protected-resource metadata, RFC 6750 bearer extraction + `WWW-Authenticate`
+challenges, and a request guard that binds the token to this resource (RFC 8707) and maps failures to 401/403.
+
+```python
+from token_validator import AccessTokenValidator, ProtectedResource, ValidatorConfig
+
+validator = AccessTokenValidator(ValidatorConfig(
+    issuer="https://as.example.com", audiences=["https://mcp.example.com/mcp"],  # audience = this server
+    jwks_uri="https://as.example.com/jwks", required_scopes=["mcp:call"]))
+resource = ProtectedResource("https://mcp.example.com/mcp", ["https://as.example.com"], validator)
+
+# serve resource.metadata() at resource.metadata_path()  →  /.well-known/oauth-protected-resource
+decision = resource.authenticate(authorization_header)          # or .authenticate(hdr, ["extra:scope"])
+if decision.authorized:
+    handle(decision.result.subject, decision.result.scopes)
+else:
+    reply(decision.status, {"WWW-Authenticate": decision.www_authenticate})   # 401 or 403
+```
+
+Per the [MCP authorization spec](https://modelcontextprotocol.io/specification/2025-06-18/basic/authorization)
+that's the entire resource-server duty (OAuth 2.1 + RFC 9728 / 8414 / 8707); only the last-mile middleware
+wiring into a given server framework is platform-specific — a runnable, dependency-free example ships in each
+language's `examples/`. The same `ProtectedResource` serves A2A agents, whose Agent Cards just declare an
+OAuth2/bearer scheme.
+
 ## Not production keys
 
 The fixed keys in `vectors/inputs.json` and `validation/tokens.json` exist **only** so the ports produce
