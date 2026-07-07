@@ -1,19 +1,20 @@
 # client-attestation-sdk-polyglot
 
-Agent-side OAuth SDKs in **Python, TypeScript, and Go** — for authenticating agents and workloads on common
-runtimes (Bedrock AgentCore, LangChain, Node/edge, Go services). Two complementary sides, the same API shape
-in every language:
+Agent-side OAuth SDKs in **Java, Python, TypeScript, and Go** — for authenticating agents and workloads on
+common runtimes (Bedrock AgentCore, LangChain, Node/edge, JVM and Go services). Two capabilities:
 
-1. **Client attestation builder** — build the credential a client presents to *get* a token
-   ([draft-ietf-oauth-attestation-based-client-auth](https://datatracker.ietf.org/doc/draft-ietf-oauth-attestation-based-client-auth/)):
+1. **Client attestation builder** *(all four languages)* — build the credential a client presents to *get* a
+   token ([draft-ietf-oauth-attestation-based-client-auth](https://datatracker.ietf.org/doc/draft-ietf-oauth-attestation-based-client-auth/)):
    the Client Attestation JWT + a PoP JWT (`attest_jwt_client_auth`) or DPoP proof
-   (`attest_jwt_client_auth_dpop`), plus the request headers.
-2. **Token validator** — the resource-server side: *validate* a token it receives — JWT signature via the
-   issuer's JWKS, `iss`/`exp`/`nbf`, audience and scope — with optional RFC 7662 introspection and
-   AS-metadata discovery.
+   (`attest_jwt_client_auth_dpop`), plus the request headers. Any of them can sign with a key held in a
+   vault (`OpenBaoTransitSigner`).
+2. **Token validator + MCP/A2A resource helper** *(Python / TypeScript / Go)* — the resource-server side:
+   *validate* a token it receives — JWT signature via the issuer's JWKS, `iss`/`exp`/`nbf`, audience and
+   scope — with optional RFC 7662 introspection, AS-metadata discovery, and RFC 9728 protected-resource
+   metadata.
 
-The reference implementation and the AS-side verifier are the Java
-[client-attestation-sdk](https://github.com/dphhyland/client-attestation-sdk) /
+`java/` is the reference builder (formerly the standalone `client-attestation-sdk` repo). The **AS-side
+verifier** that accepts these credentials is separate:
 [client-attestation](https://github.com/dphhyland/client-attestation).
 
 ## Proven interoperable
@@ -32,7 +33,8 @@ all three agree with the expected verdicts. Reproduce with [`./verify-validation
 ## Layout
 
 ```
-python/       client_attestation_sdk + token_validator   (PyJWT + cryptography)
+java/         client builder only                         (jose4j; depends on oidf-jose)
+python/       client_attestation_sdk + token_validator    (PyJWT + cryptography)
 typescript/   src/ builder + src/validator/               (panva jose; Node + edge)
 go/           builder package + tokenvalidator/           (lestrrat-go/jwx)
 vectors/      client-builder shared vectors + outputs

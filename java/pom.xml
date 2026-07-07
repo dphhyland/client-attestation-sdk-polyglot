@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.pingidentity.ps.oidf</groupId>
+    <artifactId>client-attestation-sdk</artifactId>
+    <version>0.1.0</version>
+    <packaging>jar</packaging>
+
+    <name>client-attestation-sdk</name>
+    <description>Client-side builder SDK for OAuth Attestation-Based Client Authentication
+        (draft-ietf-oauth-attestation-based-client-auth): mints the Client Attestation JWT (attester side)
+        and the PoP / DPoP proofs plus request headers (client side). Built on the oidf-jose SDK. The AS-side
+        counterpart that verifies these artifacts is client-attestation.</description>
+    <url>https://github.com/dphhyland/client-attestation-sdk-polyglot</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>17</maven.compiler.release>
+    </properties>
+
+    <dependencies>
+        <dependency><groupId>com.pingidentity.ps.oidf</groupId><artifactId>oidf-jose</artifactId><version>0.1.0</version></dependency>
+        <dependency><groupId>org.bitbucket.b_c</groupId><artifactId>jose4j</artifactId><version>0.9.6</version></dependency>
+
+        <!-- test only: round-trip what the SDK builds against the AS-side verifier -->
+        <dependency><groupId>com.pingidentity.ps.oidf</groupId><artifactId>client-attestation</artifactId><version>0.1.0</version><scope>test</scope></dependency>
+        <dependency><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter</artifactId><version>5.10.2</version><scope>test</scope></dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-compiler-plugin</artifactId><version>3.13.0</version></plugin>
+            <plugin><groupId>org.apache.maven.plugins</groupId><artifactId>maven-surefire-plugin</artifactId><version>3.2.5</version></plugin>
+        </plugins>
+    </build>
+
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/dphhyland/client-attestation-sdk-polyglot</url>
+        </repository>
+    </distributionManagement>
+</project>
