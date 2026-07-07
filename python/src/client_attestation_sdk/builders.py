@@ -5,6 +5,7 @@ import time
 import uuid
 
 from .keys import SigningKeyPair, require_text, sign_compact
+from .signer import JwsSigner, sign_external
 
 ATTESTATION_TYP = "oauth-client-attestation+jwt"
 POP_TYP = "oauth-client-attestation-pop+jwt"
@@ -15,7 +16,7 @@ class ClientAttestationBuilder:
     """Builds a Client Attestation JWT — the credential a Client Attester issues to name a client
     (``sub``) and bind its instance key via ``cnf.jwk``. Attester side; sign with the attester's key."""
 
-    def __init__(self, attester_key: SigningKeyPair, issuer: str):
+    def __init__(self, attester_key: "SigningKeyPair | JwsSigner", issuer: str):
         self._attester_key = attester_key
         self._issuer = require_text(issuer, "issuer")
         self._client_id = None
@@ -68,7 +69,9 @@ class ClientAttestationBuilder:
             claims["authorization_details"] = self._authorization_details
         if self._workload:
             claims["workload"] = self._workload
-        return sign_compact(claims, self._attester_key, ATTESTATION_TYP, embed_jwk=False)
+        if isinstance(self._attester_key, SigningKeyPair):
+            return sign_compact(claims, self._attester_key, ATTESTATION_TYP, embed_jwk=False)
+        return sign_external(claims, self._attester_key, ATTESTATION_TYP)
 
     def _resolve_expiry(self, iat: int) -> int:
         if self._expires_at is not None:

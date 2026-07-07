@@ -20,6 +20,7 @@ const (
 // with the attester's issuing key.
 type ClientAttestationBuilder struct {
 	attesterKey          *SigningKeyPair
+	attesterSigner       JwsSigner
 	issuer               string
 	clientID             string
 	cnfJWK               map[string]any
@@ -34,6 +35,12 @@ type ClientAttestationBuilder struct {
 // asserting the given issuer (attestation "iss").
 func NewClientAttestationBuilder(attesterKey *SigningKeyPair, issuer string) *ClientAttestationBuilder {
 	return &ClientAttestationBuilder{attesterKey: attesterKey, issuer: issuer}
+}
+
+// NewClientAttestationBuilderWithSigner starts a builder signing the attestation with an external
+// JwsSigner (e.g. an *OpenBaoTransitSigner whose key lives in a vault) instead of a local SigningKeyPair.
+func NewClientAttestationBuilderWithSigner(signer JwsSigner, issuer string) *ClientAttestationBuilder {
+	return &ClientAttestationBuilder{attesterSigner: signer, issuer: issuer}
 }
 
 // ClientID sets the client being attested — the attestation "sub" (= client_id).
@@ -113,6 +120,9 @@ func (b *ClientAttestationBuilder) Build() (string, error) {
 	}
 	if len(b.workload) > 0 {
 		claims["workload"] = b.workload
+	}
+	if b.attesterSigner != nil {
+		return signExternal(claims, b.attesterSigner, AttestationTyp)
 	}
 	return b.attesterKey.signCompact(claims, AttestationTyp, false)
 }

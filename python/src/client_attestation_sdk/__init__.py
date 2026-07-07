@@ -7,6 +7,7 @@ from .credential import (
     ClientAttestationCredential,
 )
 from .keys import SigningKeyPair
+from .signer import JwsSigner, OpenBaoTransitSigner
 
 __all__ = [
     "SigningKeyPair",
@@ -14,6 +15,8 @@ __all__ = [
     "PopBuilder",
     "DpopProofBuilder",
     "ClientAttestationCredential",
+    "JwsSigner",
+    "OpenBaoTransitSigner",
     "ATTESTATION_HEADER",
     "POP_HEADER",
     "DPOP_HEADER",

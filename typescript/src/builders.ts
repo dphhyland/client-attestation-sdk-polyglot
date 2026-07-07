@@ -5,6 +5,7 @@ import { randomUUID } from "node:crypto";
 import type { JWK } from "jose";
 
 import { SigningKeyPair, requireText, signCompact } from "./signing-key-pair.js";
+import { type JwsSigner, signExternal } from "./signer.js";
 
 export const ATTESTATION_TYP = "oauth-client-attestation+jwt";
 export const POP_TYP = "oauth-client-attestation-pop+jwt";
@@ -19,7 +20,7 @@ function nowSeconds(): number {
  * (`sub`) and bind its instance key via `cnf.jwk`. Attester side; sign with the attester's key.
  */
 export class ClientAttestationBuilder {
-  readonly #attesterKey: SigningKeyPair;
+  readonly #attesterKey: SigningKeyPair | JwsSigner;
   readonly #issuer: string;
   #clientId: string | null = null;
   #cnfJwk: JWK | null = null;
@@ -29,7 +30,7 @@ export class ClientAttestationBuilder {
   #authorizationDetails: unknown[] | null = null;
   #workload: Record<string, unknown> | null = null;
 
-  constructor(attesterKey: SigningKeyPair, issuer: string) {
+  constructor(attesterKey: SigningKeyPair | JwsSigner, issuer: string) {
     this.#attesterKey = attesterKey;
     this.#issuer = requireText(issuer, "issuer");
   }
@@ -100,7 +101,10 @@ export class ClientAttestationBuilder {
     if (this.#workload && Object.keys(this.#workload).length > 0) {
       claims.workload = this.#workload;
     }
-    return signCompact(claims, this.#attesterKey, ATTESTATION_TYP, false);
+    if (this.#attesterKey instanceof SigningKeyPair) {
+      return signCompact(claims, this.#attesterKey, ATTESTATION_TYP, false);
+    }
+    return signExternal(claims, this.#attesterKey, ATTESTATION_TYP);
   }
 
   #resolveExpiry(iat: number): number {

@@ -16,5 +16,7 @@ export {
   POP_HEADER,
   DPOP_HEADER,
 } from "./credential.js";
+export { OpenBaoTransitSigner } from "./signer.js";
+export type { JwsSigner } from "./signer.js";
 
 export const VERSION = "0.1.0";

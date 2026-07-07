@@ -60,6 +60,23 @@ All ports emit the same shapes (ES256; `kid` = RFC 7638 thumbprint; `iat`/`exp` 
 | PoP | `oauth-client-attestation-pop+jwt` | `kid` (instance) | `aud, jti, iat` (+ optional `iss`, `challenge`) |
 | DPoP | `dpop+jwt` | `jwk` (instance pub, −kid) | `htm, htu, jti, iat` (+ optional `nonce`) |
 
+## Signing keys outside the process (Vault / HSM)
+
+The attester's issuing key doesn't have to live in the client. `OpenBaoTransitSigner` signs the attestation
+inside an OpenBao / HashiCorp Vault transit engine (`marshaling_algorithm=jws`), so the private key never
+leaves the vault — pass it to the builder in place of a local key:
+
+```python
+signer = OpenBaoTransitSigner("http://openbao:8200", vault_token, "attestation-es256")
+attestation = (ClientAttestationBuilder(signer, "https://attester.example.com")
+               .client_id("https://rp.example.com").confirmation_key(instance).expires_in(300).build())
+# a verifier registers signer.public_jwk() (kid = the key's RFC 7638 thumbprint)
+```
+
+Same in every language — TS: `await OpenBaoTransitSigner.create(addr, token, key)`; Go:
+`NewClientAttestationBuilderWithSigner(signer, issuer)`. Any key store fits the `JwsSigner` interface:
+implement `sign(signingInput) → raw r‖s` and plug it in.
+
 ## Token validation (resource server)
 
 The validator side mirrors the same config→act shape. Representative flow (Python):
