@@ -1,0 +1,32 @@
+name: publish-npm
+
+# Publishes the TypeScript SDK (typescript/) to npm on a GitHub release. One-time setup: create an npm
+# access token (Automation) and add it as the repository secret NPM_TOKEN. The package is scoped
+# (@dphhyland/…) and published with public access — change the scope in package.json to your npm org.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  npm:
+    name: Build and publish to npm
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: typescript
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          registry-url: "https://registry.npmjs.org"
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      - run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

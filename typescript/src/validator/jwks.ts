@@ -2,7 +2,7 @@
  * Resolves issuer signing keys — from a static JWKS or a `jwksUri` (fetched and cached, refreshed on an
  * unknown `kid`).
  */
-import { importJWK, type JSONWebKeySet, type JWK } from "jose";
+import { importJWK, type CryptoKey, type JSONWebKeySet, type JWK } from "jose";
 
 /** An imported verification key, as returned by jose's `importJWK`. */
 export type VerificationKey = CryptoKey | Uint8Array;

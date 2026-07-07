@@ -1,0 +1,32 @@
+name: publish-python
+
+# Publishes the Python SDK (python/) to PyPI on a GitHub release, via PyPI Trusted Publishing (OIDC) —
+# no API token needed. One-time setup: on PyPI, add this repo as a Trusted Publisher for the project
+# (owner: dphhyland, repository: client-attestation-sdk-polyglot, workflow: publish-python.yml).
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write   # required for PyPI trusted publishing
+
+jobs:
+  pypi:
+    name: Build and publish to PyPI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Build sdist + wheel
+        working-directory: python
+        run: |
+          python -m pip install --upgrade build
+          python -m build
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: python/dist

@@ -6,7 +6,8 @@
  * `token_validator` package so every port reports the same verdict for the shared vectors.
  */
 export { AccessTokenValidator } from "./validator.js";
-export type { HttpPost, HttpGet, Claims, ValidatorOptions } from "./validator.js";
+export type { HttpPost, Claims, ValidatorOptions } from "./validator.js";
+export type { HttpGet } from "./jwks.js";
 export { resolveConfig, DEFAULT_ALGORITHMS } from "./config.js";
 export type {
   ValidatorConfig,

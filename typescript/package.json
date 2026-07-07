@@ -1,5 +1,5 @@
 {
-  "name": "client-attestation-sdk",
+  "name": "@dphhyland/client-attestation-sdk",
   "version": "0.1.0",
   "description": "Client-side builder SDK for OAuth Attestation-Based Client Authentication",
   "type": "module",
@@ -18,15 +18,26 @@
   "files": [
     "dist",
     "src",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsc",
+    "prepack": "npm run build",
     "test": "vitest run",
     "emit": "tsx emit.ts",
     "validate-emit": "tsx validate-emit.ts"
   },
   "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dphhyland/client-attestation-sdk-polyglot.git",
+    "directory": "typescript"
+  },
+  "homepage": "https://github.com/dphhyland/client-attestation-sdk-polyglot/tree/main/typescript",
   "dependencies": {
     "jose": "^6.0.0"
   },
