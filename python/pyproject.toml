@@ -8,7 +8,8 @@ version = "0.1.0"
 description = "Client-side builder SDK for OAuth Attestation-Based Client Authentication"
 readme = "README.md"
 requires-python = ">=3.9"
-license = { text = "Proprietary" }
+license = { text = "Apache-2.0" }
+classifiers = ["License :: OSI Approved :: Apache Software License"]
 dependencies = [
     "pyjwt>=2.8",
     "cryptography>=41",
