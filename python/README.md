@@ -40,6 +40,28 @@ headers = cred.dpop_headers("POST", "https://as.example.com/as/token.oauth2")   
 # -> {"OAuth-Client-Attestation": "...", "OAuth-Client-Attestation-PoP" | "DPoP": "..."}
 ```
 
+## Token validator
+
+The same distribution ships a resource-server validator (`token_validator`) — the side that *receives* and
+checks a token:
+
+```python
+from token_validator import AccessTokenValidator, ValidatorConfig
+
+validator = AccessTokenValidator(ValidatorConfig(
+    issuer="https://issuer.example.com", audiences=["https://api.example.com"],
+    jwks_uri="https://issuer.example.com/jwks", required_scopes=["read"]))
+
+result = validator.validate(access_token)          # signature + iss/exp/nbf + audience + scope
+if result.valid:
+    print(result.subject, result.scopes)
+else:
+    print(result.error)                            # e.g. "expired", "insufficient_scope"
+
+# optional RFC 7662 introspection (opaque tokens / revocation):
+result = validator.validate_active(access_token)
+```
+
 ## Test
 
 ```bash

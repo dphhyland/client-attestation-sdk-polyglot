@@ -10,8 +10,9 @@ typescript/node_modules/
 go/bin/
 interop/out/
 
-# Generated interop artifacts (time-varying — inputs.json IS committed)
+# Generated interop artifacts (inputs.json / tokens.json ARE committed)
 vectors/out/
+validation/out/
 
 # Secrets / keys (real ones — the fixed test vectors in vectors/inputs.json are intentional)
 *.pem
