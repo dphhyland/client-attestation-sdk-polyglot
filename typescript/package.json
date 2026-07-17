@@ -25,6 +25,7 @@
     "build": "tsc",
     "prepack": "npm run build",
     "test": "vitest run",
+    "coverage": "vitest run --coverage",
     "emit": "tsx emit.ts",
     "validate-emit": "tsx validate-emit.ts"
   },
@@ -43,6 +44,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^2.1.9",
     "tsx": "^4.0.0",
     "typescript": "^5.4.0",
     "vitest": "^2.0.0"
