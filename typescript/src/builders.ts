@@ -182,7 +182,7 @@ export class PopBuilder {
 
 /**
  * Builds a DPoP proof JWT (RFC 9449) for attestation combined mode
- * (`attest_jwt_client_auth_dpop`): the embedded `jwk` header MUST be the attestation's `cnf` key.
+ * (PoP method `dpop_combined`): the embedded `jwk` header MUST be the attestation's `cnf` key.
  */
 export class DpopProofBuilder {
   readonly #instanceKey: SigningKeyPair;

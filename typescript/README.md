@@ -7,8 +7,8 @@ presents at the token endpoint:
 - **Client Attestation JWT** (`typ=oauth-client-attestation+jwt`) — issued by a Client Attester,
   names the client (`sub` = `client_id`) and binds its instance key via `cnf.jwk`.
 - **Client Attestation PoP JWT** (`typ=oauth-client-attestation-pop+jwt`) — proves possession of
-  the instance key (`attest_jwt_client_auth`).
-- **DPoP proof JWT** (`typ=dpop+jwt`) — combined mode (`attest_jwt_client_auth_dpop`); its embedded
+  the instance key (PoP method `attestation_pop_jwt`).
+- **DPoP proof JWT** (`typ=dpop+jwt`) — combined mode (PoP method `dpop_combined`); its embedded
   `jwk` header is the instance key bound in the attestation's `cnf`.
 
 This is one port of a polyglot SDK; it emits byte-compatible artifacts with the Java and Python

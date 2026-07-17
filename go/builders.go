@@ -219,7 +219,7 @@ func (b *PopBuilder) Build() (string, error) {
 }
 
 // DpopProofBuilder builds a DPoP proof JWT (RFC 9449) for attestation combined
-// mode (attest_jwt_client_auth_dpop): the embedded "jwk" header MUST be the
+// mode (PoP method dpop_combined): the embedded "jwk" header MUST be the
 // instance key bound in the attestation's cnf. Sign with the instance key.
 type DpopProofBuilder struct {
 	instanceKey *SigningKeyPair

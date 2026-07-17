@@ -26,7 +26,7 @@ func NewClientAttestationCredential(attestationJWT string, instanceKey *SigningK
 }
 
 // PopHeaders returns the headers for dedicated PoP-JWT mode
-// (attest_jwt_client_auth): OAuth-Client-Attestation + OAuth-Client-Attestation-PoP.
+// (PoP method attestation_pop_jwt): OAuth-Client-Attestation + OAuth-Client-Attestation-PoP.
 // clientID becomes the PoP "iss" (pass "" to omit); audience is required;
 // challenge is optional (pass "" to omit).
 func (c *ClientAttestationCredential) PopHeaders(clientID, audience, challenge string) (map[string]string, error) {
@@ -45,7 +45,7 @@ func (c *ClientAttestationCredential) PopHeaders(clientID, audience, challenge s
 }
 
 // DpopHeaders returns the headers for DPoP combined mode
-// (attest_jwt_client_auth_dpop): OAuth-Client-Attestation + DPoP (no PoP header).
+// (PoP method dpop_combined): OAuth-Client-Attestation + DPoP (no PoP header).
 // method is the token request HTTP method (DPoP "htm"); uri is the token endpoint
 // (DPoP "htu"), required; challenge is the optional server challenge (DPoP
 // "nonce", pass "" to omit).
