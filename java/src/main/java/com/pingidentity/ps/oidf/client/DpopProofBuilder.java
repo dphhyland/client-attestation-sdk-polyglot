@@ -8,7 +8,7 @@ import org.jose4j.jwt.NumericDate;
 
 /**
  * Builds a DPoP proof JWT (RFC 9449, header {@code typ=dpop+jwt}) for attestation "combined mode"
- * ({@code attest_jwt_client_auth_dpop}): a single DPoP proof doubles as the attestation proof of
+ * (PoP method {@code dpop_combined}): a single DPoP proof doubles as the attestation proof of
  * possession, so its embedded {@code jwk} header MUST be the instance key bound in the attestation's
  * {@code cnf}. Carries {@code htm}/{@code htu}/{@code iat}/{@code jti} and, when the AS issued one, the
  * challenge in {@code nonce}. Sign with the client instance key.

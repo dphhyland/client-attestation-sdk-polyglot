@@ -5,9 +5,10 @@ common runtimes (Bedrock AgentCore, LangChain, Node/edge, JVM and Go services). 
 
 1. **Client attestation builder** *(all four languages)* — build the credential a client presents to *get* a
    token ([draft-ietf-oauth-attestation-based-client-auth](https://datatracker.ietf.org/doc/draft-ietf-oauth-attestation-based-client-auth/)):
-   the Client Attestation JWT + a PoP JWT (`attest_jwt_client_auth`) or DPoP proof
-   (`attest_jwt_client_auth_dpop`), plus the request headers. Any of them can sign with a key held in a
-   vault (`OpenBaoTransitSigner`).
+   the Client Attestation JWT plus the proof of possession for auth method `attest_jwt_client_auth` —
+   a dedicated PoP JWT (PoP method `attestation_pop_jwt`) or a DPoP proof (PoP method `dpop_combined`,
+   draft -10 naming; formerly the separate `attest_jwt_client_auth_dpop` method) — and the request
+   headers. Any of them can sign with a key held in a vault (`OpenBaoTransitSigner`).
 2. **Token validator + MCP/A2A resource helper** *(Python / TypeScript / Go)* — the resource-server side:
    *validate* a token it receives — JWT signature via the issuer's JWKS, `iss`/`exp`/`nbf`, audience and
    scope — with optional RFC 7662 introspection, AS-metadata discovery, and RFC 9728 protected-resource

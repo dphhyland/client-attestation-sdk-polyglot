@@ -24,7 +24,7 @@ public final class ClientAttestationCredential {
     }
 
     /**
-     * Headers for dedicated PoP-JWT mode ({@code attest_jwt_client_auth}):
+     * Headers for dedicated PoP-JWT mode (PoP method {@code attestation_pop_jwt}):
      * {@code OAuth-Client-Attestation} + {@code OAuth-Client-Attestation-PoP}.
      *
      * @param clientId  the client id (PoP {@code iss}); may be null to omit
@@ -44,7 +44,7 @@ public final class ClientAttestationCredential {
     }
 
     /**
-     * Headers for DPoP combined mode ({@code attest_jwt_client_auth_dpop}):
+     * Headers for DPoP combined mode (PoP method {@code dpop_combined}):
      * {@code OAuth-Client-Attestation} + {@code DPoP} (and no PoP header).
      *
      * @param method    the token request HTTP method (DPoP {@code htm})

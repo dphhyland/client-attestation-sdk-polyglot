@@ -7,7 +7,7 @@ It mints the artifacts a client (and its attester) present at the token endpoint
 
 - the **Client Attestation JWT** — issued by a Client Attester, naming the client and binding its
   instance key (`cnf.jwk`);
-- the **PoP JWT** (`attest_jwt_client_auth`) or **DPoP proof** (`attest_jwt_client_auth_dpop`) — signed
+- the **PoP JWT** (PoP method `attestation_pop_jwt`) or **DPoP proof** (PoP method `dpop_combined`) — signed
   by the client instance key to prove possession;
 - the request **headers** to send.
 

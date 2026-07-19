@@ -130,7 +130,7 @@ class PopBuilder:
 
 class DpopProofBuilder:
     """Builds a DPoP proof JWT (RFC 9449) for attestation combined mode
-    (``attest_jwt_client_auth_dpop``): the embedded ``jwk`` header MUST be the attestation's ``cnf`` key."""
+    (PoP method ``dpop_combined``): the embedded ``jwk`` header MUST be the attestation's ``cnf`` key."""
 
     def __init__(self, instance_key: SigningKeyPair):
         self._instance_key = instance_key

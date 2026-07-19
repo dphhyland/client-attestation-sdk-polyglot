@@ -34,10 +34,10 @@ attestation, _ := clientattestation.
 
 cred, _ := clientattestation.NewClientAttestationCredential(attestation, instance)
 
-// Dedicated PoP-JWT mode (attest_jwt_client_auth):
+// Dedicated PoP-JWT mode (PoP method attestation_pop_jwt):
 popHeaders, _ := cred.PopHeaders("https://rp.example.com", "https://as.example.com", "")
 
-// DPoP combined mode (attest_jwt_client_auth_dpop):
+// DPoP combined mode (PoP method dpop_combined):
 dpopHeaders, _ := cred.DpopHeaders("POST", "https://as.example.com/as/token.oauth2", "")
 ```
 

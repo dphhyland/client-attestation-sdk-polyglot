@@ -22,7 +22,7 @@ export class ClientAttestationCredential {
   }
 
   /**
-   * Headers for dedicated PoP-JWT mode (`attest_jwt_client_auth`):
+   * Headers for dedicated PoP-JWT mode (PoP method `attestation_pop_jwt`):
    * `OAuth-Client-Attestation` + `OAuth-Client-Attestation-PoP`.
    */
   async popHeaders(
@@ -39,7 +39,7 @@ export class ClientAttestationCredential {
   }
 
   /**
-   * Headers for DPoP combined mode (`attest_jwt_client_auth_dpop`):
+   * Headers for DPoP combined mode (PoP method `dpop_combined`):
    * `OAuth-Client-Attestation` + `DPoP` (and no PoP header).
    */
   async dpopHeaders(
